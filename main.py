@@ -3,19 +3,9 @@ from ozon_sdk.ozon_api  import OzonApi
 
 async def main(supplier):
     product_info = asyncio.create_task(supplier.get_product_info(offer_id='', product_id=247465013, sku=0))
-    # supplies = asyncio.create_task(supplier.get_supplies(StatusEnum.ON_DELIVERY))
-    # warehouses = asyncio.create_task(supplier.get_warehouses())
-    # stocks = asyncio.create_task(supplier.get_stocks(0, 10))
-    # cards = asyncio.create_task(supplier.get_cards(100, 0))
-    # supply_orders = asyncio.create_task(supplier.get_supply_orders(""))
-    print((await product_info).result.barcode)
-    # print(await orders)
-    # print(await supplies)
-    # print(await warehouses)
-    # print(await stocks)
-    # print(await cards)
 
-    # print(await supply_orders)
+    print((await product_info).result.barcode)
+
 
 
 if __name__ == '__main__':
