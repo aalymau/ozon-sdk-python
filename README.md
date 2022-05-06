@@ -3,8 +3,9 @@
 **About**
 Library for working with the Ozone API
 ## Install
-   git clone https://gitlab.com/ajvarnabiullin/ozon-sdk-python.git
-   Copy ozon_sdk dir to desired dir
+    git clone https://gitlab.com/ajvarnabiullin/ozon-sdk-python.git
+    
+    Copy ozon_sdk dir to desired dir
 ##Using
 Example in **main.py** file
 ```python
@@ -16,7 +17,7 @@ async def main():
     answer = asyncio.create_task(api_user.get_product_list())
     await answer
     print(answer.result())
-    
+
 asyncio.run(main())
 
 ```
