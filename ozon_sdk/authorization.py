@@ -1,4 +1,5 @@
 import requests
+import json
 
 class Ozon(object):
 
@@ -12,23 +13,11 @@ class Ozon(object):
 
     def __init__(self, client_id: str='', api_key: str=''):
 
-
-        # if client_id == '' or api_key == '':
-        #     return {
-        #         'status': 401,
-        #         'messsage': 'Empty client_id or api_key'
-        #     }
-
         self.__headers = {
             'Client-Id': client_id,
             'Api-Key': api_key
         }
-        print(self.__headers)
 
-        # return {
-        #     'status': 200,
-        #     'message': 'Succcess'
-        # }
     
 
     def default_method(self, url: str, data: dict ):
@@ -41,10 +30,14 @@ class Ozon(object):
         Returns:
             _type_: _description_
         """
+        try:
+            response = requests.post(url, headers=self.__headers, json=data)
+        except:
+            return {
+                'status': 0,
+                'message': 'Connection Error: Проверьте работу сети'
+            }
         
-        response = requests.post(url, headers=self.__headers, json=data)
-        print(self.__headers)
-        print(response.json())
         if response.status_code in self.error_response_statuses:
             return {
                 'status': response.status_code,

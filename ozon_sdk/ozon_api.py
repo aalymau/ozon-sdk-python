@@ -1,4 +1,4 @@
-from .get_product_info import OzonMethods
+from .ozon_methods import OzonMethods
 from .ozonfbsfbo import OzonFboFbs
 from .ozon_transaction import OzonTransaction
 
