@@ -1,4 +1,5 @@
 import requests
+import aiohttp
 import json
 
 class Ozon(object):
@@ -19,6 +20,29 @@ class Ozon(object):
         }
 
     
+    async def get(self):
+        pass
+
+    async def post(self):
+        pass
+
+    async def _perform_get_request(self, url, params):
+        async with await self._get_session() as session:
+            async with session.get(url, params=params) as response:
+                return await response.json(content_type=None)
+
+    async def _perform_post_request(self, url, params):
+        async with await self._get_session() as session:
+            async with session.post(url, json=params) as response:
+                return await response.json()
+
+    async def _get_session(self):
+        session = aiohttp.ClientSession()
+
+        session.headers["Client-Id"] = self.__headers['Client_Id']
+        session.headers["Api-Key"] = self.__headers['Api-Key']
+
+        return session
 
     def default_method(self, url: str, data: dict ):
         """_summary_

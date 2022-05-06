@@ -1,13 +1,37 @@
 import asyncio
 from ozon_sdk.ozon_api  import OzonApi
 
-async def main():
-    api_user = OzonApi('user_id', 'api_key')
-    answer = asyncio.create_task(api_user.get_product_list())
-    await answer
-    print(answer.result())
-    # answer = asyncio.create_task(api_user.get_product_info(offer_id='', product_id=247465013, sku=0))
-    # await answer
-    # print(answer)
+async def main(supplier):
+    product_info = asyncio.create_task(supplier.get_product_info(offer_id='', product_id=247465013, sku=0))
+    # supplies = asyncio.create_task(supplier.get_supplies(StatusEnum.ON_DELIVERY))
+    # warehouses = asyncio.create_task(supplier.get_warehouses())
+    # stocks = asyncio.create_task(supplier.get_stocks(0, 10))
+    # cards = asyncio.create_task(supplier.get_cards(100, 0))
+    # supply_orders = asyncio.create_task(supplier.get_supply_orders(""))
+    print((await product_info).result.barcode)
+    # print(await orders)
+    # print(await supplies)
+    # print(await warehouses)
+    # print(await stocks)
+    # print(await cards)
 
-asyncio.run(main())
+    # print(await supply_orders)
+
+
+if __name__ == '__main__':
+    supplier = OzonApi(client_id='4', api_key='f')
+
+    asyncio.get_event_loop().run_until_complete(main(supplier))
+
+
+# async def main():
+#     api_user = OzonApi('user_id', 'api_key')
+#     answer = asyncio.create_task(api_user.get_product_list())
+#     await answer
+#     print(answer.result())
+#     # answer = asyncio.create_task(api_user.get_product_info(offer_id='', product_id=247465013, sku=0))
+#     # await answer
+#     # print(answer)
+
+# asyncio.run(main())
+
