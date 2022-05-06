@@ -11,10 +11,13 @@ Example in **main.py** file
 import asyncio
 from ozon_sdk.ozon_api  import OzonApi
 
-api_user = OzonApi('user_id', 'api_key')
-answer = asyncio.create_task(api_user.get_product_list())
-await answer
-print(answer.result())
+async def main():
+    api_user = OzonApi('user_id', 'api_key')
+    answer = asyncio.create_task(api_user.get_product_list())
+    await answer
+    print(answer.result())
+    
+asyncio.run(main())
 
 ```
 The functions are built according to the following type: get_{url}. Only an underscore is used instead of slashes
