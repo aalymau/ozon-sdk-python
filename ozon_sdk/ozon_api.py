@@ -1,8 +1,8 @@
 from .ozon_methods import OzonMethods
 from .ozonfbsfbo import OzonFboFbs
 from .ozon_transaction import OzonTransaction
-from .requests import ProductInfoRequest, ProductListRequest, ProductListFilterRequest, ProductInfoStocksRequest, ProductInfoStocksFilterRequest, ProductInfoStocksByWarehouseFBSRequest
-from .response import ProductInfoResponse, ProductListResponse, ProductInfoStocksResponse, ProductInfoStocksByWarehouseFBSResponse
+from .requests import ProductInfoRequest, ProductListRequest, ProductListFilterRequest, ProductInfoStocksRequest, ProductInfoStocksFilterRequest, ProductInfoStocksByWarehouseFBSRequest, AnalyticsStockOnWarehouseRequest
+from .response import ProductInfoResponse, ProductListResponse, ProductInfoStocksResponse, ProductInfoStocksByWarehouseFBSResponse, AnalyticsStockOnWarehouseResponse
 from .core import OzonAsyncEngine
 from .ozon_endpoints_list import OzonAPIFactory
 
@@ -28,8 +28,9 @@ class OzonApi(OzonMethods, OzonFboFbs, OzonTransaction):
 
         self._product_info_api = self._api_factory.get_api(ProductInfoResponse)
         self._product_list_api = self._api_factory.get_api(ProductListResponse)
-        self._product_info_stocks = self._api_factory.get_api(ProductInfoStocksResponse)
-        self._product_info_stocks_by_warehouse_fbs = self._api_factory.get_api(ProductInfoStocksByWarehouseFBSResponse)
+        self._product_info_stocks_api = self._api_factory.get_api(ProductInfoStocksResponse)
+        self._product_info_stocks_by_warehouse_fbs_api = self._api_factory.get_api(ProductInfoStocksByWarehouseFBSResponse)
+        self._anaytics_stock_on_warehouse_api = self._api_factory.get_api(AnalyticsStockOnWarehouseResponse)
 
     async def get_product_info(self, offer_id: str='', product_id: int=0, sku: int=0) -> ProductInfoResponse:
         """_summary_
@@ -100,7 +101,7 @@ Enum: "ALL" "VISIBLE" "INVISIBLE" "EMPTY_STOCK" "NOT_MODERATED" "MODERATED" "DIS
             last_id = last_id,
             limit = limit
         )
-        answer = await self._product_list_api.post(request)
+        answer = await self._product_info_stocks_api.post(request)
         
         
         return answer
@@ -112,20 +113,14 @@ Enum: "ALL" "VISIBLE" "INVISIBLE" "EMPTY_STOCK" "NOT_MODERATED" "MODERATED" "DIS
             fbs_sku (list): SKU товара, который продаётся со склада продавца (схемы FBS и rFBS).Максимальное количестов SKU в одном запросе — 500.
         """
 
-        url = 'https://api-seller.ozon.ru/v1/product/info/stocks-by-warehouse/fbs'
-        data = {
-            'fbs_sku': fbs_sku,
-        }
-        #limit = 500
-
         request = ProductInfoStocksByWarehouseFBSRequest(
            fbs_sku = fbs_sku
         )
-        answer = await self._product_info_stocks_by_warehouse_fbs.post(request)
+        answer = await self._product_info_stocks_by_warehouse_fbs_api.post(request)
 
         return answer
 
-    async def get_analytics_stock_on_warehouse(self, limit: int=100, offset: int=0):
+    async def get_analytics_stock_on_warehouse(self, limit: int=100, offset: int=0) -> AnalyticsStockOnWarehouseResponse:
         """_summary_
 
         Args:
@@ -133,13 +128,13 @@ Enum: "ALL" "VISIBLE" "INVISIBLE" "EMPTY_STOCK" "NOT_MODERATED" "MODERATED" "DIS
             offset (int, optional): Количество элементов, которое будет пропущено в ответе. Например, если offset = 10, то ответ начнётся с 11-го найденного элемента.. Defaults to 0.
         """
 
-        url = 'https://api-seller.ozon.ru/v1/analytics/stock_on_warehouses'
-        data = {
-            'limit': limit,
-            'offset': offset,
-        }
+        request = AnalyticsStockOnWarehouseRequest(
+           limit = limit,
+           offset = offset
+        )
+        answer = await self._anaytics_stock_on_warehouse_api.post(request)
 
-        return self.default_method(url, data)
+        return answer
 
     def get_product_info_list(self, offer_id: list=[], product_id: list=[], sku: list=[]):
         """_summary_

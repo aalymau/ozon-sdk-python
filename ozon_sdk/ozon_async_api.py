@@ -41,7 +41,6 @@ class OzonAsyncApi:
         """
         parameters = request.dict(by_alias=True)
         response = await self._engine.post(self._url, parameters)
-        print(response)
         data = await self._parse_response(response)
         return data
 
