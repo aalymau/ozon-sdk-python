@@ -1,5 +1,5 @@
 
-from .response import ProductInfoResponse, ProductListResponse, ProductInfoStocksResponse
+from .response import ProductInfoResponse, ProductListResponse, ProductInfoStocksResponse, ProductInfoStocksByWarehouseFBSResponse
 from .response import BaseResponse
 from typing import Type
 from .ozon_async_api import OzonAsyncApi
@@ -13,6 +13,7 @@ class OzonAPIFactory:
         ProductInfoResponse: '/v2/product/info',
         ProductListResponse: '/v2/product/list',
         ProductInfoStocksResponse: '/v3/product/info/stocks',
+        ProductInfoStocksByWarehouseFBSResponse: '/v1/product/info/stocks-by-warehouse/fbs'
     }
 
     def __init__(self, engine: OzonAsyncEngine):

@@ -41,6 +41,7 @@ class OzonAsyncApi:
         """
         parameters = request.dict(by_alias=True)
         response = await self._engine.post(self._url, parameters)
+        print(response)
         data = await self._parse_response(response)
         return data
 
@@ -51,6 +52,9 @@ class OzonAsyncApi:
         :param response: тело ответа
         :return:
         """
+        if response.get("error"):
+            raise Exception(response.get("errorText"))
+
         data = await self._parse_response_object(response)
         return data
 
@@ -60,6 +64,6 @@ class OzonAsyncApi:
         :param response:
         :return:
         """
-        # if response.get("error"):
-        #     raise Exception(response.get("errorText"))
+        if response.get("error"):
+            raise Exception(response.get("errorText"))
         return self._response_type.parse_obj(response)

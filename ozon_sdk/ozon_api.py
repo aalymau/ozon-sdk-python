@@ -1,8 +1,8 @@
 from .ozon_methods import OzonMethods
 from .ozonfbsfbo import OzonFboFbs
 from .ozon_transaction import OzonTransaction
-from .requests import ProductInfoRequest, ProductListRequest, ProductListFilterRequest, ProductInfoStocksRequest, ProductInfoStocksFilterRequest
-from .response import ProductInfoResponse, ProductListResponse, ProductInfoStocksResponse
+from .requests import ProductInfoRequest, ProductListRequest, ProductListFilterRequest, ProductInfoStocksRequest, ProductInfoStocksFilterRequest, ProductInfoStocksByWarehouseFBSRequest
+from .response import ProductInfoResponse, ProductListResponse, ProductInfoStocksResponse, ProductInfoStocksByWarehouseFBSResponse
 from .core import OzonAsyncEngine
 from .ozon_endpoints_list import OzonAPIFactory
 
@@ -29,6 +29,7 @@ class OzonApi(OzonMethods, OzonFboFbs, OzonTransaction):
         self._product_info_api = self._api_factory.get_api(ProductInfoResponse)
         self._product_list_api = self._api_factory.get_api(ProductListResponse)
         self._product_info_stocks = self._api_factory.get_api(ProductInfoStocksResponse)
+        self._product_info_stocks_by_warehouse_fbs = self._api_factory.get_api(ProductInfoStocksByWarehouseFBSResponse)
 
     async def get_product_info(self, offer_id: str='', product_id: int=0, sku: int=0) -> ProductInfoResponse:
         """_summary_
@@ -104,7 +105,7 @@ Enum: "ALL" "VISIBLE" "INVISIBLE" "EMPTY_STOCK" "NOT_MODERATED" "MODERATED" "DIS
         
         return answer
     
-    def get_product_info_stocks_by_warehouse_fbs(self, fbs_sku: list=[]):
+    async def get_product_info_stocks_by_warehouse_fbs(self, fbs_sku: list=[str]) -> ProductInfoStocksByWarehouseFBSResponse:
         """_summary_
 
         Args:
@@ -116,7 +117,13 @@ Enum: "ALL" "VISIBLE" "INVISIBLE" "EMPTY_STOCK" "NOT_MODERATED" "MODERATED" "DIS
             'fbs_sku': fbs_sku,
         }
         #limit = 500
-        return self.default_method(url, data)
+
+        request = ProductInfoStocksByWarehouseFBSRequest(
+           fbs_sku = fbs_sku
+        )
+        answer = await self._product_info_stocks_by_warehouse_fbs.post(request)
+
+        return answer
 
     async def get_analytics_stock_on_warehouse(self, limit: int=100, offset: int=0):
         """_summary_

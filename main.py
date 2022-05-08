@@ -12,11 +12,18 @@ async def main(supplier):
 
     # print((await product_list))
 
-    product_info_stocks = asyncio.create_task(supplier.get_product_info_stocks(
-        offer_id:=[], product_id=[], visibility='ALL', last_id='', limit=100
+    # product_info_stocks = asyncio.create_task(supplier.get_product_info_stocks(
+    #     offer_id:=[], product_id=[], visibility='ALL', last_id='', limit=100
+    # ))
+
+    # print((await product_info_stocks))
+
+    product_info_stocks_by_warehouse_fbs = asyncio.create_task(supplier.get_product_info_stocks_by_warehouse_fbs(
+        fbs_sku=['32132', '9023213']
     ))
 
-    print((await product_info_stocks))
+    print((await product_info_stocks_by_warehouse_fbs))
+
 if __name__ == '__main__':
     supplier = OzonApi(client_id='', api_key='')
 
