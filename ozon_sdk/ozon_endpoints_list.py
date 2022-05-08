@@ -1,5 +1,5 @@
 
-from .response import ProductInfoResponse
+from .response import ProductInfoResponse, ProductListResponse, ProductInfoStocksResponse
 from .response import BaseResponse
 from typing import Type
 from .ozon_async_api import OzonAsyncApi
@@ -10,7 +10,9 @@ class OzonAPIFactory:
     """
 
     api_list: dict[Type[BaseResponse], str] = {
-        ProductInfoResponse: '/v2/product/info'
+        ProductInfoResponse: '/v2/product/info',
+        ProductListResponse: '/v2/product/list',
+        ProductInfoStocksResponse: '/v3/product/info/stocks',
     }
 
     def __init__(self, engine: OzonAsyncEngine):

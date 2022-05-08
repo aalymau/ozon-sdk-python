@@ -1,8 +1,8 @@
 from .ozon_methods import OzonMethods
 from .ozonfbsfbo import OzonFboFbs
 from .ozon_transaction import OzonTransaction
-from .requests import ProductInfoRequest
-from .response import ProductInfoResponse
+from .requests import ProductInfoRequest, ProductListRequest, ProductListFilterRequest, ProductInfoStocksRequest, ProductInfoStocksFilterRequest
+from .response import ProductInfoResponse, ProductListResponse, ProductInfoStocksResponse
 from .core import OzonAsyncEngine
 from .ozon_endpoints_list import OzonAPIFactory
 
@@ -27,7 +27,8 @@ class OzonApi(OzonMethods, OzonFboFbs, OzonTransaction):
         self._api_factory = OzonAPIFactory(self._engine)
 
         self._product_info_api = self._api_factory.get_api(ProductInfoResponse)
-
+        self._product_list_api = self._api_factory.get_api(ProductListResponse)
+        self._product_info_stocks = self._api_factory.get_api(ProductInfoStocksResponse)
 
     async def get_product_info(self, offer_id: str='', product_id: int=0, sku: int=0) -> ProductInfoResponse:
         """_summary_
@@ -45,7 +46,7 @@ class OzonApi(OzonMethods, OzonFboFbs, OzonTransaction):
         return answer
 
     
-    async def get_product_list(self, offer_id: list=[], product_id: list=[], visibility: str='ALL', last_id:str='', limit: int=100 ):
+    async def get_product_list(self, offer_id: list=[], product_id: list=[], visibility: str='ALL', last_id:str='', limit: int=100 ) -> ProductListResponse:
         """_summary_
 
         Args:
@@ -60,19 +61,19 @@ Enum: "ALL" "VISIBLE" "INVISIBLE" "EMPTY_STOCK" "NOT_MODERATED" "MODERATED" "DIS
         Returns:
             _type_: _description_
         """
-        url = 'https://api-seller.ozon.ru/v2/product/list'
-        data = {
-            'filter': {
-                'offer_id': offer_id,
-                'product_id': product_id,
-                'visibility': visibility
-            },
-            'last_id': last_id,
-            'limit': limit,
-        }
+        request = ProductListRequest(
+            filter = ProductListFilterRequest(
+                offer_id = offer_id,
+                product_id = product_id,
+                visibility =  visibility
+            ),
+            last_id = last_id,
+            limit = limit
+        )
+        answer = await self._product_list_api.post(request)
         
         
-        return self.default_method(url, data)
+        return answer
 
     async def get_product_info_stocks(self,offer_id: list=[], product_id: list=[], visibility: str='ALL', last_id:str='', limit: int=100):
         """_summary_
@@ -88,20 +89,20 @@ Enum: "ALL" "VISIBLE" "INVISIBLE" "EMPTY_STOCK" "NOT_MODERATED" "MODERATED" "DIS
 
         Returns:
             _type_: _description_
-        """
-
-        url = 'https://api-seller.ozon.ru/v3/product/info/stocks'
-        data = {
-            'filter': {
-                'offer_id': offer_id,
-                'product_id': product_id,
-                'visibility': visibility
-            },
-            'last_id': last_id,
-            'limit': limit,
-        }
+        """        
+        request = ProductInfoStocksRequest(
+            filter = ProductInfoStocksFilterRequest(
+                offer_id = offer_id,
+                product_id = product_id,
+                visibility =  visibility
+            ),
+            last_id = last_id,
+            limit = limit
+        )
+        answer = await self._product_list_api.post(request)
         
-        return self.default_method(url, data)
+        
+        return answer
     
     def get_product_info_stocks_by_warehouse_fbs(self, fbs_sku: list=[]):
         """_summary_

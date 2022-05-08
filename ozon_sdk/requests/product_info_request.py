@@ -1,4 +1,4 @@
-from .ozon_base_request import BaseRequest
+from .base import BaseRequest
 
 class ProductInfoRequest(BaseRequest):
     offer_id: str = ''
