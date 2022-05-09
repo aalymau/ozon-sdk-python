@@ -1,6 +1,6 @@
 
 from ozon_sdk.response.analytics_stock_on_warehouse_response import AnalyticsStockOnWarehouseResponse
-from .response import ProductInfoResponse, ProductListResponse, ProductInfoStocksResponse, ProductInfoStocksByWarehouseFBSResponse, AnalyticsStockOnWarehouseResponse, ProductInfoListResponse
+from .response import ProductInfoResponse, ProductListResponse, ProductInfoStocksResponse, ProductInfoStocksByWarehouseFBSResponse, AnalyticsStockOnWarehouseResponse, ProductInfoListResponse, CategoryTreeResponse
 from .response import BaseResponse
 from typing import Type
 from .ozon_async_api import OzonAsyncApi
@@ -17,6 +17,7 @@ class OzonAPIFactory:
         ProductInfoStocksByWarehouseFBSResponse: '/v1/product/info/stocks-by-warehouse/fbs',
         AnalyticsStockOnWarehouseResponse: '/v1/analytics/stock_on_warehouses',
         ProductInfoListResponse: '/v2/product/info/list',
+        CategoryTreeResponse: '/v2/category/tree'
     }
 
     def __init__(self, engine: OzonAsyncEngine):

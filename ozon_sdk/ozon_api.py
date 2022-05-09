@@ -1,19 +1,9 @@
-from .ozon_methods import OzonMethods
-from .ozonfbsfbo import OzonFboFbs
-from .ozon_transaction import OzonTransaction
-from .requests import ProductInfoRequest, ProductListRequest, ProductListFilterRequest, ProductInfoStocksRequest, ProductInfoStocksFilterRequest, ProductInfoStocksByWarehouseFBSRequest, AnalyticsStockOnWarehouseRequest, ProductInfoListRequest
-from .response import ProductInfoResponse, ProductListResponse, ProductInfoStocksResponse, ProductInfoStocksByWarehouseFBSResponse, AnalyticsStockOnWarehouseResponse, ProductInfoListResponse
+from .requests import ProductInfoRequest, ProductListRequest, ProductListFilterRequest, ProductInfoStocksRequest, ProductInfoStocksFilterRequest, ProductInfoStocksByWarehouseFBSRequest, AnalyticsStockOnWarehouseRequest, ProductInfoListRequest, CategoryTreeRequest
+from .response import ProductInfoResponse, ProductListResponse, ProductInfoStocksResponse, ProductInfoStocksByWarehouseFBSResponse, AnalyticsStockOnWarehouseResponse, ProductInfoListResponse, CategoryTreeResponse
 from .core import OzonAsyncEngine
 from .ozon_endpoints_list import OzonAPIFactory
 
-class OzonApi(OzonMethods, OzonFboFbs, OzonTransaction):
-    """_summary_
-
-    Args:
-        OzonMethods (_type_): _description_
-        OzonFboFbs (_type_): _description_
-        OzonTransaction (_type_): _description_
-    """
+class OzonApi:
 
     def __init__(self, client_id: str, api_key: str):
         """_summary_
@@ -32,6 +22,7 @@ class OzonApi(OzonMethods, OzonFboFbs, OzonTransaction):
         self._product_info_stocks_by_warehouse_fbs_api = self._api_factory.get_api(ProductInfoStocksByWarehouseFBSResponse)
         self._anaytics_stock_on_warehouse_api = self._api_factory.get_api(AnalyticsStockOnWarehouseResponse)
         self._product_info_list_api = self._api_factory.get_api(ProductInfoListResponse)
+        self._category_tree_api = self._api_factory.get_api(CategoryTreeResponse)
 
     async def get_product_info(self, offer_id: str='', product_id: int=0, sku: int=0) -> ProductInfoResponse:
         """_summary_
@@ -163,13 +154,13 @@ Enum: "ALL" "VISIBLE" "INVISIBLE" "EMPTY_STOCK" "NOT_MODERATED" "MODERATED" "DIS
             language (str, optional): Default: "DEFAULT" Enum: "DEFAULT" "RU" "EN". Defaults to 'RU'.
         """
 
-        url = 'https://api-seller.ozon.ru/v2/category/tree'
-        data = {
-            'category_id': category_id,
-            'language': language,
-        }
+        request = CategoryTreeRequest(
+           category_id=category_id,
+           language=language
+        )
+        answer = await self._category_tree_api.post(request)
 
-        return self.default_method(url, data)
+        return answer
 
 
     async def get_finance_transaction_list(self, _from: str, to: str='', operation_type: list=[], posting_number: str='', transaction_type: str='all', page: int=1, page_size: int=1000):
