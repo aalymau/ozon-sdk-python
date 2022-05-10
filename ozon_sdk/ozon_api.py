@@ -1,5 +1,5 @@
-from .requests import ProductInfoRequest, ProductListRequest, ProductListFilterRequest, ProductInfoStocksRequest, ProductInfoStocksFilterRequest, ProductInfoStocksByWarehouseFBSRequest, AnalyticsStockOnWarehouseRequest, ProductInfoListRequest, CategoryTreeRequest, FinanceTransactionListRequest, FinanceTransactionListV3RequestFilter, Date, TransactionTypeEnum, OperationTypeEnum
-from .response import ProductInfoResponse, ProductListResponse, ProductInfoStocksResponse, ProductInfoStocksByWarehouseFBSResponse, AnalyticsStockOnWarehouseResponse, ProductInfoListResponse, CategoryTreeResponse, FinanceTransactionListResponse
+from .requests import ProductInfoRequest, ProductListRequest, ProductListFilterRequest, ProductInfoStocksRequest, ProductInfoStocksFilterRequest, ProductInfoStocksByWarehouseFBSRequest, AnalyticsStockOnWarehouseRequest, ProductInfoListRequest, CategoryTreeRequest, FinanceTransactionListRequest, FinanceTransactionListV3RequestFilter, Date, PostingFBOListRequest, PostingFBOListFilter, PostingFBOListWith
+from .response import ProductInfoResponse, ProductListResponse, ProductInfoStocksResponse, ProductInfoStocksByWarehouseFBSResponse, AnalyticsStockOnWarehouseResponse, ProductInfoListResponse, CategoryTreeResponse, FinanceTransactionListResponse, PostingFBOListResponse
 from .core import OzonAsyncEngine
 from .ozon_endpoints_list import OzonAPIFactory
 
@@ -24,6 +24,7 @@ class OzonApi:
         self._product_info_list_api = self._api_factory.get_api(ProductInfoListResponse)
         self._category_tree_api = self._api_factory.get_api(CategoryTreeResponse)
         self._finance_transaction_list_api = self._api_factory.get_api(FinanceTransactionListResponse)
+        self._posting_fbo_list_api = self._api_factory.get_api(PostingFBOListResponse)
 
     async def get_product_info(self, offer_id: str='', product_id: int=0, sku: int=0) -> ProductInfoResponse:
         """_summary_
@@ -207,7 +208,7 @@ Enum: "ALL" "VISIBLE" "INVISIBLE" "EMPTY_STOCK" "NOT_MODERATED" "MODERATED" "DIS
 
         return answer
 
-    async def get_posting_fbo_list(self, dir: str, since: str, status: str, to: str, limit:       int=1000, offset: int=0, translit: bool=True, _with: dict={} ):
+    async def get_posting_fbo_list(self, dir: str, since: str, status: str, to: str, limit:       int=1000, offset: int=0, translit: bool=True, analytics_data=False,  financial_data=False):
         """_summary_
 
         Args:
@@ -230,21 +231,25 @@ Enum: "ALL" "VISIBLE" "INVISIBLE" "EMPTY_STOCK" "NOT_MODERATED" "MODERATED" "DIS
             _with (dict, optional): Дополнительные поля, которые нужно добавить в ответ. Defaults to {}.
         """
 
-        url = 'https://api-seller.ozon.ru/v2/posting/fbo/list'
-        data = {
-            'dir': dir,
-            'filter': {
-                'since': since,
-                'status': status,
-                'to': to,
-            },
-            'limit': limit,
-            'offset': offset,
-            'translit': translit,
-            'with': _with,
-        }
 
-        return self.default_method(url, data)
+        request = PostingFBOListRequest(
+           dir=dir,
+           filter = PostingFBOListFilter(
+               since=since,
+               status=status,
+               to=to
+           ),
+           limit=limit, 
+           offset=offset,
+           translit=translit,
+           with_field=PostingFBOListWith(
+               analytics_data=analytics_data,
+               financial_data=financial_data
+           )
+        )
+        answer = await self._posting_fbo_list_api.post(request)
+
+        return answer
 
     async def get_posting_fbs_list(self, dir: str, delivery_method_id:list, order_id:int, provider_id: list, since: str, status: str, to: str, warehouse_id:list, limit:       int=1000, offset: int=0, translit: bool=True, _with: dict={}):
         """_summary_

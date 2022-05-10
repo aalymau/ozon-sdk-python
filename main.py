@@ -47,18 +47,40 @@ async def main(supplier):
 
     # print((await category_tree))
 
-    finance_trasaction_list = asyncio.create_task(supplier.get_finance_transaction_list(
+    # finance_trasaction_list = asyncio.create_task(supplier.get_finance_transaction_list(
 
-           _from = '2021-11-01T00:00:00.000Z',
-           to='2021-11-02T00:00:00.000Z',
-           operation_type=[], posting_number='',
-           transaction_type='all',
-           page=1,
-           page_size=1000,
+    #        _from = '2021-11-01T00:00:00.000Z',
+    #        to='2021-11-02T00:00:00.000Z',
+    #        operation_type=[], posting_number='',
+    #        transaction_type='all',
+    #        page=1,
+    #        page_size=1000,
 
-    ))
+    # ))
 
-    print((await finance_trasaction_list))
+    # print((await finance_trasaction_list))
+    
+    posting_fbo_list = asyncio.create_task(supplier.get_posting_fbo_list(
+
+          
+  dir= "ASC",
+
+    since= "2021-09-01T00:00:00.000Z",
+    status="",
+    to= "2021-11-17T10:44:12.828Z",
+  
+  limit= 5,
+  offset= 0,
+  translit= True,
+
+    analytics_data= True,
+    financial_data= True
+  
+
+
+    )
+    )
+    print((await posting_fbo_list))
 
 if __name__ == '__main__':
     supplier = OzonApi(client_id='', api_key='')
