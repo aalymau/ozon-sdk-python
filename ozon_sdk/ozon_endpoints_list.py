@@ -1,6 +1,6 @@
 
 from ozon_sdk.response.analytics_stock_on_warehouse_response import AnalyticsStockOnWarehouseResponse
-from .response import ProductInfoResponse, ProductListResponse, ProductInfoStocksResponse, ProductInfoStocksByWarehouseFBSResponse, AnalyticsStockOnWarehouseResponse, ProductInfoListResponse, CategoryTreeResponse, FinanceTransactionListResponse, PostingFBOListResponse, PostingFBSListResponse
+from .response import *
 from .response import BaseResponse
 from typing import Type
 from .ozon_async_api import OzonAsyncApi

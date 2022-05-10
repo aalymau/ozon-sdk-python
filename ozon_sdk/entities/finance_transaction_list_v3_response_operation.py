@@ -1,6 +1,7 @@
 from .base import BaseEntity
 from .operation_posting import OperationPosting
 from .operation_service import OperationService
+from datetime import datetime
 
 class Item(BaseEntity):
     name: str
@@ -11,7 +12,7 @@ class FinanceTransactionListV3ResponseOperation(BaseEntity):
     amount: float
     delivery_charge: float
     items: list[Item]
-    operation_date: str
+    operation_date: datetime
     operation_id: int
     operation_type: str
     operation_type_name: str

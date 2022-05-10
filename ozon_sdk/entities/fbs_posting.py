@@ -5,6 +5,8 @@ from .fbs_posting_analytics_data import FPSPostingAnalyticsData
 from .customer import Customer
 from .fbs_posting_product import FBSPostingProduct
 from .fbs_posting_requirements import FBSPostingRequirements
+from datetime import datetime
+
 class Addressee(BaseEntity):
     name: str
     phone: str
@@ -35,7 +37,7 @@ class FBSPosting(BaseEntity):
     barcodes: Barcodes
     cancellation: Cancellation
     customer: Customer
-    delivering_date: str
+    delivering_date: datetime
     delivery_method: DeliveryMethod
     financial_data: FinacialData
     in_process_at: str
@@ -45,7 +47,7 @@ class FBSPosting(BaseEntity):
     posting_number: str
     products: list[FBSPostingProduct]
     requirements: FBSPostingRequirements
-    shipment_date: str
+    shipment_date: datetime
     status: str
     tpl_integration_type: str
     tracking_number: str

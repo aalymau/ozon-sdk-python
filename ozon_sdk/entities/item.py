@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 
 from .base import BaseEntity
 from .status import Status
@@ -28,7 +28,7 @@ class Item(BaseEntity):
     buybox_price: str
     category_id: int
     color_image: str
-    created_at: str
+    created_at: datetime
     fbo_sku: int
     fbs_sku: int
     id: int

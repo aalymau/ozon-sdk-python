@@ -1,6 +1,8 @@
 from .base import BaseRequest
 from pydantic import Field
 from enum import Enum
+from rfc3339_validator import validate_rfc3339
+from pydantic import validator
 
 class Status(str, Enum):
     empty = ''
@@ -25,6 +27,18 @@ class PostingFBSListFilter(BaseRequest):
     to: str
     status: Status
     warehouse_id: list[int]
+
+    @validator('since')
+    def validate_since(cls, v):
+        if not validate_rfc3339(v):
+            raise ValueError("date_start must be rfc3339 valid")
+        return v
+
+    @validator('to')
+    def validate_to(cls, v):
+        if not validate_rfc3339(v):
+            raise ValueError("date_start must be rfc3339 valid")
+        return v
 
 class PostingFBSListWith(BaseRequest):
     analytics_data: bool

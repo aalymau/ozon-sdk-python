@@ -1,5 +1,5 @@
-from .requests import ProductInfoRequest, ProductListRequest, ProductListFilterRequest, ProductInfoStocksRequest, ProductInfoStocksFilterRequest, ProductInfoStocksByWarehouseFBSRequest, AnalyticsStockOnWarehouseRequest, ProductInfoListRequest, CategoryTreeRequest, FinanceTransactionListRequest, FinanceTransactionListV3RequestFilter, Date, PostingFBOListRequest, PostingFBOListFilter, PostingFBOListWith, PostingFBSListRequest, PostingFBSListFilter, PostingFBSListWith
-from .response import ProductInfoResponse, ProductListResponse, ProductInfoStocksResponse, ProductInfoStocksByWarehouseFBSResponse, AnalyticsStockOnWarehouseResponse, ProductInfoListResponse, CategoryTreeResponse, FinanceTransactionListResponse, PostingFBOListResponse, PostingFBSListResponse
+from .requests import *
+from .response import *
 from .core import OzonAsyncEngine
 from .ozon_endpoints_list import OzonAPIFactory
 

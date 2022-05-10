@@ -1,9 +1,10 @@
 from .base import BaseEntity
+from datetime import datetime
 
 class FPSPostingAnalyticsData(BaseEntity):
     city: str
-    delivery_date_begin: str
-    delivery_date_end: str
+    delivery_date_begin: datetime
+    delivery_date_end: datetime
     delivery_type: str
     is_legal: bool
     is_premium: bool
@@ -13,4 +14,3 @@ class FPSPostingAnalyticsData(BaseEntity):
     tpl_provider_id: int
     warehouse: str
     warehouse_id: int
-    

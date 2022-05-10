@@ -8,4 +8,4 @@ class Stocks(BaseEntity):
 class ProductInfoStocksItem(BaseEntity):
     offer_id: str
     product_id: int
-    sotcks: Stocks
+    stocks: list[Stocks] = []
