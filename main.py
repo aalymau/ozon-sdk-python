@@ -39,13 +39,26 @@ async def main(supplier):
 
     # print((await product_info_list))
 
-    category_tree = asyncio.create_task(supplier.get_category_tree(
+    # category_tree = asyncio.create_task(supplier.get_category_tree(
 
-           category_id=17028968
+    #        category_id=17028968
+
+    # ))
+
+    # print((await category_tree))
+
+    finance_trasaction_list = asyncio.create_task(supplier.get_finance_transaction_list(
+
+           _from = '2021-11-01T00:00:00.000Z',
+           to='2021-11-02T00:00:00.000Z',
+           operation_type=[], posting_number='',
+           transaction_type='all',
+           page=1,
+           page_size=1000,
 
     ))
 
-    print((await category_tree))
+    print((await finance_trasaction_list))
 
 if __name__ == '__main__':
     supplier = OzonApi(client_id='', api_key='')

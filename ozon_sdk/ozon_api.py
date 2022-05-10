@@ -1,5 +1,5 @@
-from .requests import ProductInfoRequest, ProductListRequest, ProductListFilterRequest, ProductInfoStocksRequest, ProductInfoStocksFilterRequest, ProductInfoStocksByWarehouseFBSRequest, AnalyticsStockOnWarehouseRequest, ProductInfoListRequest, CategoryTreeRequest
-from .response import ProductInfoResponse, ProductListResponse, ProductInfoStocksResponse, ProductInfoStocksByWarehouseFBSResponse, AnalyticsStockOnWarehouseResponse, ProductInfoListResponse, CategoryTreeResponse
+from .requests import ProductInfoRequest, ProductListRequest, ProductListFilterRequest, ProductInfoStocksRequest, ProductInfoStocksFilterRequest, ProductInfoStocksByWarehouseFBSRequest, AnalyticsStockOnWarehouseRequest, ProductInfoListRequest, CategoryTreeRequest, FinanceTransactionListRequest, FinanceTransactionListV3RequestFilter, Date, TransactionTypeEnum, OperationTypeEnum
+from .response import ProductInfoResponse, ProductListResponse, ProductInfoStocksResponse, ProductInfoStocksByWarehouseFBSResponse, AnalyticsStockOnWarehouseResponse, ProductInfoListResponse, CategoryTreeResponse, FinanceTransactionListResponse
 from .core import OzonAsyncEngine
 from .ozon_endpoints_list import OzonAPIFactory
 
@@ -23,6 +23,7 @@ class OzonApi:
         self._anaytics_stock_on_warehouse_api = self._api_factory.get_api(AnalyticsStockOnWarehouseResponse)
         self._product_info_list_api = self._api_factory.get_api(ProductInfoListResponse)
         self._category_tree_api = self._api_factory.get_api(CategoryTreeResponse)
+        self._finance_transaction_list_api = self._api_factory.get_api(FinanceTransactionListResponse)
 
     async def get_product_info(self, offer_id: str='', product_id: int=0, sku: int=0) -> ProductInfoResponse:
         """_summary_
@@ -146,7 +147,7 @@ Enum: "ALL" "VISIBLE" "INVISIBLE" "EMPTY_STOCK" "NOT_MODERATED" "MODERATED" "DIS
 
         return answer
 
-    async def get_category_tree(self, category_id: int=0, language: str='RU'):
+    async def get_category_tree(self, category_id: int=0, language: str='RU') -> CategoryTreeResponse:
         """_summary_
 
         Args:
@@ -163,7 +164,7 @@ Enum: "ALL" "VISIBLE" "INVISIBLE" "EMPTY_STOCK" "NOT_MODERATED" "MODERATED" "DIS
         return answer
 
 
-    async def get_finance_transaction_list(self, _from: str, to: str='', operation_type: list=[], posting_number: str='', transaction_type: str='all', page: int=1, page_size: int=1000):
+    async def get_finance_transaction_list(self, _from: str, to: str='', operation_type: list=[str], posting_number: str='', transaction_type: str='all', page: int=1, page_size: int=1000) -> FinanceTransactionListResponse:
         """_summary_
 
         Args:
@@ -187,23 +188,25 @@ Enum: "ALL" "VISIBLE" "INVISIBLE" "EMPTY_STOCK" "NOT_MODERATED" "MODERATED" "DIS
                 Пример: 2019-11-25T10:43:06.51. Defaults to ''.
         """
 
-        url = 'https://api-seller.ozon.ru/v3/finance/transaction/list'
-        data = {
-            'filter': {
-                'date': {
-                    'from': _from,
-                    'to': to,
-                },
-                'operation_type': operation_type,
-                'posting_number': posting_number,
-                'transaction_type': transaction_type,
-            },
-            'page': page,
-            'page_size': page_size,
-        }
+        
+        request = FinanceTransactionListRequest(
+           filter=FinanceTransactionListV3RequestFilter(
+               date = Date(
+                   from_field=_from,
+                   to=to
+               ),
+               operation_type=operation_type,
+               posting_number=posting_number,
+               transaction_type=transaction_type
 
-        return self.default_method(url, data)
-    
+           ),
+           page=page,
+           page_size=page_size
+        )
+        answer = await self._finance_transaction_list_api.post(request)
+
+        return answer
+
     async def get_posting_fbo_list(self, dir: str, since: str, status: str, to: str, limit:       int=1000, offset: int=0, translit: bool=True, _with: dict={} ):
         """_summary_
 
