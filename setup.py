@@ -1,11 +1,15 @@
 from setuptools import setup, find_packages
- 
-setup(name='ozon-sdk-python',
-      version='1.0',
+
+setup(name='ozon_sdk_python',
+      version='0.0.1',
+      description='Ozon API to pydantic class',
+      long_description='Ozon API to pydantic class',
+      classifiers=[
+          'Programming Language :: Python :: 3.10',
+      ],
       url='https://gitlab.com/ajvarnabiullin/ozon-sdk-python',
-      license='MIT',
       author='Aivar Nabiullin',
-      author_email='ajvarnabiullin@gmail.com',
-      description='Lib for ozon api',
-      long_description_content_type=open('README.md').read(),
+      author_email='ajvarnabiullin0@gmail.com',
+      packages=find_packages(),
+      # include_package_data=False,
       zip_safe=False)

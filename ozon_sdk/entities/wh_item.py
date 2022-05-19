@@ -1,4 +1,5 @@
 from .base import BaseEntity
+from pydantic import Field
 
 class Stock(BaseEntity):
     for_sale: int = 0
@@ -22,6 +23,6 @@ class Item(BaseEntity):
 class WhItem(BaseEntity):
     """Данные остатков по определённым складам"""
 
-    id: str
+    column_id: str = Field(alias='id')
     items: list[Item]
     name: str
