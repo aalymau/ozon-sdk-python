@@ -104,7 +104,7 @@ async def main(supplier):
 #     print((await posting_fbs_list))
 
 if __name__ == '__main__':
-    supplier = OzonApi(client_id='48237', api_key='f624596d-2f1e-4644-8d19-8bb45fb39004')
+    supplier = OzonApi(client_id='', api_key='')
 
     asyncio.get_event_loop().run_until_complete(main(supplier))
 
